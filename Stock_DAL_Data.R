@@ -28,6 +28,13 @@ names(Stock_2020_DAL)[5] <- "Close_20"
 names(Stock_2020_DAL)[6] <- "Adj_Close_20"
 names(Stock_2020_DAL)[7] <- "Volume_20"
 
+# scaling data
+Stock_2020_DAL$Open_20 <- with(Stock_2020_DAL, Open_20 * (3/5))
+Stock_2020_DAL$High_20 <- with(Stock_2020_DAL, High_20 * (3/5))
+Stock_2020_DAL$Low_20 <- with(Stock_2020_DAL, Low_20 * (3/5))
+Stock_2020_DAL$Close_20 <- with(Stock_2020_DAL, Close_20 * (3/5))
+Stock_2020_DAL$Adj_Close_20 <- with(Stock_2020_DAL, Adj_Close_20 * (3/5))
+
 # adding id for merging
 Stock_2014_DAL <- Stock_2014_DAL %>% 
   mutate(id = row_number())
@@ -39,3 +46,12 @@ DAL_Stock <- merge(Stock_2014_DAL, Stock_2020_DAL, by = "id")
 
 write_xlsx(DAL_Stock, "DAL_Stock.xlsx")
 write.csv(DAL_Stock, "DAL_Stock.csv")
+
+plot(DAL_Stock$Open_14,
+     main="Stock Prices for Ebola and COVID-19",
+     sub = "Beginning on the First Officially Declared Case",
+     ylab="Initial Stock Price",
+     type="l",
+     col="blue", 
+     ylim=c(10, 42))
+lines(DAL_Stock$Open_20, col="red")
